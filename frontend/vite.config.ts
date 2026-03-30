@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target: "https://elecommerce-production.up.railway.app",
+        target: "https://reportelecom-production.up.railway.app",
         changeOrigin: true,
       },
     },
