@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { KPIs, ChartDataPoint, Order, ExportFilters } from "../types";
 
-const api = axios.create({ baseURL: "/api" });
+const api = axios.create({ baseURL: "https://reportelecom-production.up.railway.app/api" });
 
 export interface OrdersResponse {
   success: boolean;
