@@ -81,14 +81,14 @@ export default function Dashboard() {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <div className="w-9 h-9 bg-gradient-to-br from-brand-500 to-accent-500 rounded-xl flex items-center justify-center text-lg">
-                🚀
+                <img src="/src/assets/icon.svg" alt="Logo" />
               </div>
               <h1 className="text-2xl font-bold text-white">
-                Queue<span className="text-gradient">SaaS</span>
+                Report<span className="text-gradient">EleCom</span>
               </h1>
             </div>
             <p className="text-gray-400 text-sm">
-              Cola de Pedidos de EleCommerce — Monitoreo en Tiempo Real
+              Reporte de Pedidos de EleCommerce — Monitoreo en Tiempo Real
             </p>
           </div>
           <div className="flex items-center gap-3">
