@@ -37,9 +37,9 @@ function Card({ title, value, subtitle, icon, gradient, loading }: CardProps) {
 
 export default function KPICards({ data, loading }: KPICardsProps) {
   const fmt = (n: number) =>
-    new Intl.NumberFormat("en-US", { minimumFractionDigits: 0 }).format(n);
+    new Intl.NumberFormat("es-ES", { minimumFractionDigits: 0 }).format(n);
   const fmtCurrency = (n: number) =>
-    new Intl.NumberFormat("en-US", {
+    new Intl.NumberFormat("es-ES", {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
@@ -48,33 +48,33 @@ export default function KPICards({ data, loading }: KPICardsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <Card
-        title="Total Orders"
+        title="Total de Pedidos"
         value={data ? fmt(data.totalOrders) : "—"}
-        subtitle="All time"
+        subtitle="Todo el tiempo"
         icon="📦"
         gradient="bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20"
         loading={loading}
       />
       <Card
-        title="Revenue Today"
+        title="Ingresos Hoy"
         value={data ? fmtCurrency(data.todayRevenue) : "—"}
-        subtitle={data ? `${data.todayCount} orders today` : undefined}
+        subtitle={data ? `${data.todayCount} pedidos hoy` : undefined}
         icon="💰"
         gradient="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/20"
         loading={loading}
       />
       <Card
-        title="Pending in Queue"
+        title="Pendientes en Cola"
         value={data ? fmt(data.pendingInQueue) : "—"}
-        subtitle="Awaiting processing"
+        subtitle="Esperando procesamiento"
         icon="⏳"
         gradient="bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/20"
         loading={loading}
       />
       <Card
-        title="Today's Orders"
+        title="Pedidos de Hoy"
         value={data ? fmt(data.todayCount) : "—"}
-        subtitle="Received today"
+        subtitle="Recibidos hoy"
         icon="🛒"
         gradient="bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/20"
         loading={loading}

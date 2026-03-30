@@ -1,9 +1,10 @@
 import { Queue } from "bullmq";
 import { redisConnection } from "./redis";
+import { OrderJobData } from "../types/order";
 
 export const ORDER_QUEUE_NAME = "orders";
 
-export const orderQueue = new Queue(ORDER_QUEUE_NAME, {
+export const orderQueue = new Queue<OrderJobData>(ORDER_QUEUE_NAME, {
   connection: redisConnection,
   defaultJobOptions: {
     attempts: 3,

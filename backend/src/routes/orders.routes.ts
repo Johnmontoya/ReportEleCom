@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { orderQueue } from "../config/queue";
 import { Order } from "../models/order.model";
-import { OrderJobData } from "../worker";
+import { OrderJobData } from "../types/order";
 
 const router = Router();
 
@@ -10,47 +10,58 @@ const router = Router();
 // ─────────────────────────────────────────────
 router.post("/", async (req: Request, res: Response): Promise<void> => {
   try {
-    const { orderId, customer, total, date, products } = req.body as OrderJobData;
+    const rawData = req.body;
+    const isArray = Array.isArray(rawData);
+    const ordersToProcess: OrderJobData[] = isArray ? rawData : [rawData];
 
-    // Basic validation
-    if (!orderId || !customer || total === undefined || !products?.length) {
-      res.status(400).json({
-        success: false,
-        message: "Missing required fields: orderId, customer, total, products",
+    const results = [];
+    const errors = [];
+
+    for (const orderData of ordersToProcess) {
+      const { orderId, customer, total, date, products } = orderData;
+
+      // Basic validation
+      if (!orderId || !customer || total === undefined || !products?.length) {
+        errors.push({ orderId: orderId || "unknown", message: "Missing required fields" });
+        continue;
+      }
+
+      // Create a placeholder document immediately (upsert)
+      await Order.findOneAndUpdate(
+        { orderId },
+        {
+          orderId,
+          customer,
+          total,
+          date: date ? new Date(date) : new Date(),
+          products,
+          status: "pending",
+        },
+        { upsert: true, new: true }
+      );
+
+      // Enqueue the job
+      const job = await orderQueue.add("process-order", orderData, {
+        jobId: orderId,
       });
-      return;
+
+      results.push({ orderId, jobId: job.id });
     }
 
-    // Create a placeholder document immediately so it's visible in the DB
-    await Order.findOneAndUpdate(
-      { orderId },
-      {
-        orderId,
-        customer,
-        total,
-        date: date ? new Date(date) : new Date(),
-        products,
-        status: "pending",
-      },
-      { upsert: true, new: true }
-    );
-
-    // Enqueue the job
-    const job = await orderQueue.add("process-order", req.body as OrderJobData, {
-      jobId: orderId, // idempotent: one job per orderId
-    });
-
     res.status(202).json({
-      success: true,
-      message: "Order enqueued successfully",
-      jobId: job.id,
-      orderId,
+      success: errors.length === 0,
+      message: isArray 
+        ? `Processed ${results.length} orders successfully. ${errors.length} failed.`
+        : "Order enqueued successfully",
+      data: results,
+      errors: errors.length > 0 ? errors : undefined
     });
   } catch (error: any) {
-    console.error("Error enqueuing order:", error);
+    console.error("Error enqueuing order(s):", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
 
 // ─────────────────────────────────────────────
 // GET /api/orders — Fetch orders with filters
@@ -63,8 +74,8 @@ router.get("/", async (req: Request, res: Response): Promise<void> => {
     if (status) filter.status = status;
     if (from || to) {
       filter.date = {};
-      if (from) (filter.date as Record<string,unknown>)["$gte"] = new Date(from as string);
-      if (to) (filter.date as Record<string,unknown>)["$lte"] = new Date(to as string);
+      if (from) (filter.date as Record<string, unknown>)["$gte"] = new Date(from as string);
+      if (to) (filter.date as Record<string, unknown>)["$lte"] = new Date(to as string);
     }
 
     const pageNum = parseInt(page as string, 10);
@@ -157,8 +168,8 @@ router.get("/export", async (req: Request, res: Response): Promise<void> => {
     if (status) filter.status = status;
     if (from || to) {
       filter.date = {};
-      if (from) (filter.date as Record<string,unknown>)["$gte"] = new Date(from as string);
-      if (to) (filter.date as Record<string,unknown>)["$lte"] = new Date(to as string);
+      if (from) (filter.date as Record<string, unknown>)["$gte"] = new Date(from as string);
+      if (to) (filter.date as Record<string, unknown>)["$lte"] = new Date(to as string);
     }
 
     const orders = await Order.find(filter).sort({ date: -1 }).lean();

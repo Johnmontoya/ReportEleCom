@@ -12,6 +12,13 @@ const STATUS_STYLES: Record<string, string> = {
   failed: "bg-red-500/10 text-red-400 border border-red-500/20",
 };
 
+const STATUS_LABELS: Record<string, string> = {
+  pending: "Pendiente",
+  processing: "Procesando",
+  completed: "Completado",
+  failed: "Fallido",
+};
+
 const STATUS_ICONS: Record<string, string> = {
   pending: "⏳",
   processing: "🔄",
@@ -33,7 +40,7 @@ function SkeletonRow() {
 
 export default function OrdersTable({ orders, loading }: OrdersTableProps) {
   const fmtDate = (d: string) =>
-    new Date(d).toLocaleString("en-US", {
+    new Date(d).toLocaleString("es-ES", {
       month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
     });
 
@@ -41,11 +48,11 @@ export default function OrdersTable({ orders, loading }: OrdersTableProps) {
     <div className="glass-card overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-700/50 flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-white">Recent Orders</h2>
-          <p className="text-gray-400 text-sm">Latest 20 orders across all statuses</p>
+          <h2 className="text-lg font-bold text-white">Pedidos Recientes</h2>
+          <p className="text-gray-400 text-sm">Últimos 20 pedidos de todos los estados</p>
         </div>
         {!loading && (
-          <span className="text-gray-400 text-sm">{orders.length} records</span>
+          <span className="text-gray-400 text-sm">{orders.length} registros</span>
         )}
       </div>
 
@@ -53,12 +60,12 @@ export default function OrdersTable({ orders, loading }: OrdersTableProps) {
         <table className="w-full text-sm">
           <thead>
             <tr className="text-gray-400 text-xs uppercase tracking-wider border-b border-gray-800">
-              <th className="text-left px-4 py-3 font-semibold">Order ID</th>
-              <th className="text-left px-4 py-3 font-semibold">Customer</th>
+              <th className="text-left px-4 py-3 font-semibold">ID de Pedido</th>
+              <th className="text-left px-4 py-3 font-semibold">Cliente</th>
               <th className="text-right px-4 py-3 font-semibold">Total</th>
-              <th className="text-left px-4 py-3 font-semibold">Products</th>
-              <th className="text-left px-4 py-3 font-semibold">Date</th>
-              <th className="text-left px-4 py-3 font-semibold">Status</th>
+              <th className="text-left px-4 py-3 font-semibold">Productos</th>
+              <th className="text-left px-4 py-3 font-semibold">Fecha</th>
+              <th className="text-left px-4 py-3 font-semibold">Estado</th>
             </tr>
           </thead>
           <tbody>
@@ -69,7 +76,7 @@ export default function OrdersTable({ orders, loading }: OrdersTableProps) {
                 <tr>
                   <td colSpan={6} className="px-4 py-16 text-center text-gray-500">
                     <p className="text-3xl mb-2">📭</p>
-                    <p>No orders yet. Send one via the API!</p>
+                    <p>Aún no hay pedidos. ¡Envía uno a través de la API!</p>
                   </td>
                 </tr>
               )
@@ -81,17 +88,17 @@ export default function OrdersTable({ orders, loading }: OrdersTableProps) {
                   <td className="px-4 py-3 font-mono text-brand-500 text-xs">{order.orderId}</td>
                   <td className="px-4 py-3 text-gray-200 font-medium">{order.customer}</td>
                   <td className="px-4 py-3 text-right text-emerald-400 font-bold">
-                    ${order.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    ${order.total.toLocaleString("es-ES", { minimumFractionDigits: 2 })}
                   </td>
                   <td className="px-4 py-3 text-gray-400">
-                    {order.products.length} item{order.products.length !== 1 ? "s" : ""}
+                    {order.products.length} {order.products.length !== 1 ? "artículos" : "artículo"}
                   </td>
                   <td className="px-4 py-3 text-gray-400 whitespace-nowrap">
                     {fmtDate(order.date)}
                   </td>
                   <td className="px-4 py-3">
                     <span className={`status-badge ${STATUS_STYLES[order.status] ?? ""}`}>
-                      {STATUS_ICONS[order.status]} {order.status}
+                      {STATUS_ICONS[order.status]} {STATUS_LABELS[order.status] ?? order.status}
                     </span>
                   </td>
                 </tr>

@@ -10,6 +10,8 @@
     "worker": "ts-node-dev --respawn --transpile-only src/worker.ts"
   },
   "dependencies": {
+    "@bull-board/api": "^6.20.6",
+    "@bull-board/express": "^6.20.6",
     "bullmq": "^5.13.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

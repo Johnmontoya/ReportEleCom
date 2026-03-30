@@ -59,7 +59,7 @@ export default function Dashboard() {
       await exportToExcel(data, "queue_system_orders");
     } catch (err) {
       console.error("Export failed:", err);
-      alert("Export failed. Please try again.");
+      alert("La exportación falló. Por favor, inténtalo de nuevo.");
     } finally {
       setExporting(false);
     }
@@ -88,13 +88,13 @@ export default function Dashboard() {
               </h1>
             </div>
             <p className="text-gray-400 text-sm">
-              E-commerce Order Queue — Real-time Monitoring
+              Cola de Pedidos de EleCommerce — Monitoreo en Tiempo Real
             </p>
           </div>
           <div className="flex items-center gap-3">
             {lastUpdated && (
               <span className="text-gray-500 text-xs hidden sm:block">
-                Updated {lastUpdated.toLocaleTimeString()}
+                Actualizado {lastUpdated.toLocaleDateString()} {lastUpdated.toLocaleTimeString()}
               </span>
             )}
             <button
@@ -102,7 +102,7 @@ export default function Dashboard() {
               disabled={loading}
               className="btn-secondary text-xs px-3 py-2"
             >
-              🔄 Refresh
+              🔄 Actualizar
             </button>
           </div>
         </header>
@@ -117,14 +117,14 @@ export default function Dashboard() {
         <div className="glass-card p-6">
           <div className="flex flex-col lg:flex-row lg:items-end gap-4">
             <div className="flex-1">
-              <h2 className="text-lg font-bold text-white mb-1">Export Data</h2>
+              <h2 className="text-lg font-bold text-white mb-1">Exportar Datos</h2>
               <p className="text-gray-400 text-sm mb-4">
-                Filter and download historical orders as an Excel file
+                Filtra y descarga el historial de pedidos como un archivo Excel
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">
-                    From Date
+                    Desde Fecha
                   </label>
                   <input
                     type="date"
@@ -138,7 +138,7 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">
-                    To Date
+                    Hasta Fecha
                   </label>
                   <input
                     type="date"
@@ -152,7 +152,7 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">
-                    Status
+                    Estado
                   </label>
                   <select
                     value={exportFilters.status ?? ""}
@@ -162,11 +162,11 @@ export default function Dashboard() {
                     className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-gray-200 text-sm
                                focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all"
                   >
-                    <option value="">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="processing">Processing</option>
-                    <option value="completed">Completed</option>
-                    <option value="failed">Failed</option>
+                    <option value="">Todos los Estados</option>
+                    <option value="pending">Pendiente</option>
+                    <option value="processing">En Proceso</option>
+                    <option value="completed">Completado</option>
+                    <option value="failed">Fallido</option>
                   </select>
                 </div>
               </div>
@@ -191,10 +191,10 @@ export default function Dashboard() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                     />
                   </svg>
-                  Generating…
+                  Generando…
                 </>
               ) : (
-                <>📥 Export to Excel</>
+                <>📥 Exportar a Excel</>
               )}
             </button>
           </div>
@@ -205,7 +205,7 @@ export default function Dashboard() {
 
         {/* ── Footer ─────────────────────────────────────────────── */}
         <footer className="text-center text-gray-600 text-xs pb-4">
-          QueueSaaS · Powered by BullMQ + MongoDB · Auto-refreshes every 15s
+          QueueSaaS · Impulsado por BullMQ + MongoDB · Se actualiza automáticamente cada 15s
         </footer>
       </div>
     </div>

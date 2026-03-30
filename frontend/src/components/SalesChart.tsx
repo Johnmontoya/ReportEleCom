@@ -31,10 +31,10 @@ const CustomTooltip = ({
       <p className="font-semibold text-gray-200 mb-2">{label}</p>
       {payload.map((p, i) => (
         <p key={i} style={{ color: p.color }} className="flex justify-between gap-4">
-          <span>{p.name}:</span>
+          <span>{p.name === "Revenue" ? "Ingresos" : p.name === "Orders" ? "Pedidos" : p.name}:</span>
           <span className="font-bold">
             {p.name === "Revenue"
-              ? `$${p.value.toLocaleString("en-US")}`
+              ? `$${p.value.toLocaleString("es-ES")}`
               : p.value}
           </span>
         </p>
@@ -46,18 +46,18 @@ const CustomTooltip = ({
 export default function SalesChart({ data, loading }: SalesChartProps) {
   const formatDate = (d: string) => {
     const date = new Date(d + "T00:00:00");
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return date.toLocaleDateString("es-ES", { month: "short", day: "numeric" });
   };
 
   return (
     <div className="glass-card p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-lg font-bold text-white">Sales Trend</h2>
-          <p className="text-gray-400 text-sm">Last 30 days — completed orders</p>
+          <h2 className="text-lg font-bold text-white">Tendencia de Ventas</h2>
+          <p className="text-gray-400 text-sm">Últimos 30 días — pedidos completados</p>
         </div>
         <span className="status-badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-          Live
+          En Vivo
         </span>
       </div>
 
@@ -67,7 +67,7 @@ export default function SalesChart({ data, loading }: SalesChartProps) {
         <div className="h-72 flex items-center justify-center text-gray-500">
           <div className="text-center">
             <p className="text-4xl mb-2">📊</p>
-            <p>No chart data yet. Start enqueuing orders!</p>
+            <p>Aún no hay datos. ¡Empieza a procesar pedidos!</p>
           </div>
         </div>
       ) : (
@@ -111,7 +111,7 @@ export default function SalesChart({ data, loading }: SalesChartProps) {
               yAxisId="revenue"
               type="monotone"
               dataKey="revenue"
-              name="Revenue"
+              name="Ingresos"
               stroke="#667eea"
               strokeWidth={2}
               fill="url(#revenueGradient)"
@@ -120,7 +120,7 @@ export default function SalesChart({ data, loading }: SalesChartProps) {
             <Bar
               yAxisId="count"
               dataKey="count"
-              name="Orders"
+              name="Pedidos"
               fill="#f5576c"
               fillOpacity={0.7}
               radius={[4, 4, 0, 0]}

@@ -1,0 +1,20 @@
+{
+  "orderId": "TEST-1001",
+  "customer": "María López",
+  "total": 350.75,
+  "date": "2024-03-25T15:00:00Z",
+  "products": [
+    {
+      "productId": "P-01",
+      "name": "Monitor 24",
+      "quantity": 1,
+      "price": 250.00
+    },
+    {
+      "productId": "P-02",
+      "name": "Teclado",
+      "quantity": 1,
+      "price": 100.75
+    }
+  ]
+}

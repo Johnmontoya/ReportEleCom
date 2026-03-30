@@ -1,19 +1,32 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { createBullBoard } from "@bull-board/api";
+import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
+import { ExpressAdapter } from "@bull-board/express";
+
 import { connectDB } from "./config/db";
+import { orderQueue } from "./config/queue";
 import ordersRouter from "./routes/orders.routes";
-// Import queue to ensure it's initialized on startup
-import "./config/queue";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+
+// ── BullBoard Helper ──────────────────────────────────────────────────────────
+const serverAdapter = new ExpressAdapter();
+serverAdapter.setBasePath("/admin/queues");
+
+createBullBoard({
+  queues: [new BullMQAdapter(orderQueue)],
+  serverAdapter: serverAdapter,
+});
 
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 
 // ── Routes ──────────────────────────────────────────────────────────────────
+app.use("/admin/queues", serverAdapter.getRouter());
 app.use("/api/orders", ordersRouter);
 
 app.get("/health", (_req, res) => {
@@ -25,12 +38,11 @@ async function bootstrap(): Promise<void> {
   await connectDB();
   app.listen(PORT, () => {
     console.log(`🚀 API Server running on http://localhost:${PORT}`);
+    console.log(`📋 Control Panel (BullBoard): http://localhost:${PORT}/admin/queues`);
     console.log(`📋 Endpoints:`);
-    console.log(`   POST   /api/orders         → Enqueue order`);
-    console.log(`   GET    /api/orders         → List orders`);
+    console.log(`   POST   /api/orders         → Enqueue order(s)`);
     console.log(`   GET    /api/orders/kpis    → Dashboard KPIs`);
     console.log(`   GET    /api/orders/chart   → Daily sales chart`);
-    console.log(`   GET    /api/orders/export  → Export dataset`);
   });
 }
 
