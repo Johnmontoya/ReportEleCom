@@ -22,7 +22,7 @@ createBullBoard({
 });
 
 // ── Middleware ──────────────────────────────────────────────────────────────
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: ["https://report-ele-com.vercel.app", "https://ele-commerce.vercel.app"], credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 
 // ── Routes ──────────────────────────────────────────────────────────────────
