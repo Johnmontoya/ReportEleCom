@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import logoIcon from "../assets/icon.png";
 import KPICards from "../components/KPICards";
 import SalesChart from "../components/SalesChart";
 import OrdersTable from "../components/OrdersTable";
@@ -80,8 +81,8 @@ export default function Dashboard() {
         <header className="sticky top-0 z-50 border-b border-white/5 bg-dark-950/60 backdrop-blur-xl shadow-sm">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-brand-400 via-accent-500 to-brand-600 rounded-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(238,73,151,0.3)] animate-float">
-                <img src="/src/assets/icon.svg" alt="Logo" className="w-6 h-6" />
+              <div className="w-12 h-12 border border-white/10 rounded-2xl flex items-center justify-center animate-float">
+                <img src={logoIcon} alt="Logo" className="w-6 h-6" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">
@@ -94,7 +95,7 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center gap-4">
               {lastUpdated && (
-                <div className="flex flex-col items-end hidden sm:flex">
+                <div className="flex-col items-end hidden sm:flex">
                   <span className="text-gray-500 text-[10px] font-bold uppercase tracking-wider">Última actualización</span>
                   <span className="text-gray-300 text-xs font-medium">
                     {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
@@ -133,7 +134,7 @@ export default function Dashboard() {
                 <p className="text-gray-400 text-sm mb-6">
                   Descarga un reporte detallado de los pedidos en formato Excel aplicando los filtros correspondientes.
                 </p>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="relative">
                     <label className="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">
@@ -213,7 +214,7 @@ export default function Dashboard() {
         <footer className="py-6 border-t border-white/5 bg-dark-950/80 backdrop-blur-md mt-auto">
           <div className="max-w-[1400px] mx-auto px-6 text-center">
             <p className="text-gray-500 text-xs font-medium">
-              ReportEleCom · Impulsado por BullMQ & React · 
+              ReportEleCom · Impulsado por BullMQ & React ·
               <span className="inline-flex items-center ml-1 text-brand-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse mr-1.5"></span>
                 Actualización en tiempo real ({POLLING_INTERVAL / 1000}s)
